@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Start Somewhere</title>
+<meta name="description" content="You're one person. Here's what one person can do, sorted by how much time you have.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&family=Zilla+Slab:wght@600;700&display=swap">
+<meta property="og:title" content="Start Somewhere">
+<meta property="og:description" content="You're one person. Here's what one person can do, sorted by how much time you have.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232343c4'/%3E%3Cpath d='M9 22l6-6 4 4 5-8' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+/* Layout: one narrow column built for a phone held after a QR scan; sticky effort nav; top picks first, the rest folded. */
+:root{
+  --bg:#f3f5f9; --surface:#ffffff; --ink:#151c2e; --muted:#5a6377; --line:#dde2ec;
+  --accent:#2343c4; --accent-soft:#e6eafb; --pick:#b77900; --pick-soft:#fdf2d8; --risk:#b3261e; --risk-soft:#fbe7e5;
+  --display:"Zilla Slab",Rockwell,"Roboto Slab",Georgia,serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1320; --surface:#171d2d; --ink:#e8ebf3; --muted:#9aa3b8; --line:#2a3247;
+  --accent:#8ea3ff; --accent-soft:#1f2850; --pick:#f0bf4c; --pick-soft:#3a2f12; --risk:#ff8a80; --risk-soft:#3d1c1a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1320; --surface:#171d2d; --ink:#e8ebf3; --muted:#9aa3b8; --line:#2a3247;
+  --accent:#8ea3ff; --accent-soft:#1f2850; --pick:#f0bf4c; --pick-soft:#3a2f12; --risk:#ff8a80; --risk-soft:#3d1c1a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:680px;margin:0 auto;padding-inline:16px;padding-block:28px 48px}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+header.top{display:grid;gap:10px;padding-bottom:18px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(40px,10vw,60px);line-height:.95;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.lede{margin:0;color:var(--muted);font-size:17px;max-width:34em}
+
+.tools{display:grid;gap:10px;margin-block:8px 6px}
+.search{position:relative}
+.search input{width:100%;font:inherit;font-size:16px;padding:12px 14px 12px 40px;border:1.5px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.search input:focus{border-color:var(--accent);outline:none}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:13px;font-weight:600;padding:6px 11px;border-radius:999px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.55}
+
+nav.tiers{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:-16px;padding:10px 16px;border-bottom:1px solid var(--line);display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav.tiers::-webkit-scrollbar{display:none}
+nav.tiers a{flex:0 0 auto;text-decoration:none;font-size:13px;font-weight:600;padding:7px 12px;border-radius:8px;color:var(--muted);white-space:nowrap}
+nav.tiers a:hover,nav.tiers a.on{background:var(--accent-soft);color:var(--accent)}
+
+.move{display:flex;gap:12px;align-items:center;margin-top:20px;padding:14px 16px;border-radius:14px;background:var(--accent-soft);text-decoration:none}
+.move b{display:block;font-size:15px}
+.move span{font-size:14px;color:var(--muted)}
+.move .arr{margin-left:auto;color:var(--accent);font-weight:700;font-size:20px}
+
+section.tier{padding-top:30px;scroll-margin-top:60px}
+.th{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:4px}
+.th h2{font-family:var(--display);font-size:30px;line-height:1.05;margin:0;text-wrap:balance}
+.time{font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;display:flex;align-items:center;gap:8px}
+.meter{display:inline-flex;gap:3px}
+.meter i{width:8px;height:14px;border-radius:2px;background:var(--line)}
+.meter i.f{background:var(--accent)}
+.blurb{margin:0 0 12px;color:var(--muted);font-size:15px}
+
+ol.list{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+ol.list li+li{border-top:1px solid var(--line)}
+ol.list a{display:grid;grid-template-columns:1fr auto;gap:2px 12px;padding:13px 16px;text-decoration:none}
+ol.list a:hover{background:var(--accent-soft)}
+.nm{font-weight:700;font-size:16px;min-width:0;display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.ds{grid-column:1;color:var(--muted);font-size:14.5px;min-width:0}
+.meta{grid-column:1;display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:4px}
+.dom{font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.go{grid-row:1/span 3;grid-column:2;align-self:center;color:var(--muted);font-size:18px}
+.tag{font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--bg);color:var(--muted)}
+.tag.risk{background:var(--risk-soft);color:var(--risk)}
+.pick{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--pick-soft);color:var(--pick)}
+.more{display:block;width:100%;margin-top:8px;font:inherit;font-size:14px;font-weight:600;padding:11px;border-radius:12px;border:1.5px dashed var(--line);background:transparent;color:var(--accent);cursor:pointer}
+.empty{padding:28px 16px;text-align:center;color:var(--muted)}
+
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);display:grid;gap:10px}
+footer p{margin:0;max-width:60ch}
+footer a{color:var(--accent)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+<style>html,body{margin:0} :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">A pocket guide for one person</div>
+    <h1>Start Somewhere</h1>
+    <p class="lede">You're one person. Here's what one person can do, sorted by how much time you have. Every link is legal and free to look at.</p>
+  </header>
+
+  <div class="tools">
+    <label class="search" for="q">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Search 189 actions" autocomplete="off" aria-label="Search actions">
+    </label>
+    <div class="chips" id="chips" role="group" aria-label="Filter by type"></div>
+  </div>
+
+  <nav class="tiers" id="nav" aria-label="Jump to effort level"></nav>
+
+  <a class="move" href="https://pathfwd.netlify.app" target="_blank" rel="noopener">
+    <div><b>Want the deep-dive tools?</b><span>The original curators now run The Path Forward, a full toolkit.</span></div>
+    <span class="arr" aria-hidden="true">→</span>
+  </a>
+
+  <main id="main"></main>
+
+  <footer>
+    <div class="legend"><span class="pick">Top pick</span> curator's favorites <span class="tag risk">Higher risk</span> know the law where you live first</div>
+    <p>Links originally curated by <a href="https://linktr.ee/triple_a_usa" target="_blank" rel="noopener">Average Americans' Activism</a>, now <a href="https://pathfwd.netlify.app" target="_blank" rel="noopener">The Path Forward</a> (CC BY-NC-SA 4.0). Reorganized and rehosted as a backup; tracking codes removed from links.</p>
+    <p>A link here is a pointer, not an endorsement. Sites change, so check an organization before giving it money or personal information. Last reviewed October 2026.</p>
+  </footer>
+</div>
+
+<script>
+const LINKS = [{"t":"quick","n":"Resistbot","d":"Text automated letters to Congress.","u":"https://resist.bot/","s":true,"g":["call"]},{"t":"quick","n":"5Calls","d":"Call your reps, scripts provided.","u":"https://5calls.org/getting-started","s":true,"g":["call"]},{"t":"quick","n":"WWAV","d":"Check your voter registration!","u":"https://whenweallvote.org/voting101/","s":true,"g":["vote"]},{"t":"quick","n":"Americans of Conscience","d":"A curated action list.","u":"https://americansofconscience.com","s":true,"g":["email"]},{"t":"quick","n":"Please Grow A Spine","d":"Congress-related first steps.","u":"https://www.pleasegrowaspine.org","s":true,"g":[]},{"t":"quick","n":"ACLU","d":"Know your rights, take action, and more.","u":"https://www.aclu.org/know-your-rights","s":true,"g":[]},{"t":"quick","n":"Amnesty Int.","d":"Aid struggles against injustice abroad.","u":"https://www.amnesty.org/en/get-involved/take-action","s":true,"g":[]},{"t":"quick","n":"CA's Phone Call List #1","d":"Call these numbers ASAP.","u":"https://cmarmitage.substack.com/p/5-phone-calls-can-stop-american-fascism","s":false,"g":["call"]},{"t":"quick","n":"CA's Phone Call List #2","d":"Get their funding pulled.","u":"https://cmarmitage.substack.com/p/are-democrats-about-to-pull-nearly","s":false,"g":["call"]},{"t":"quick","n":"CA's Phone Call List #3","d":"Demand a state of emergency declared.","u":"https://substack.com/@chrisarmitage1/p-189514480","s":false,"g":["call"]},{"t":"quick","n":"Stop the War on Iran","d":"An anti-war petition.","u":"https://stoptrumpswars.org/tell-congress-no","s":false,"g":["email"]},{"t":"quick","n":"No License to Kill","d":"Tell Congress no war.","u":"https://nolicensetokill.com","s":false,"g":["call","email"]},{"t":"quick","n":"Abolish Super PACs Act","d":"A quick but crucial petition.","u":"https://www.abolishingsuperpacs.org","s":false,"g":[]},{"t":"quick","n":"DAC","d":"One coordinated task at a time.","u":"https://democracyactioncenter.org","s":false,"g":[]},{"t":"quick","n":"Citizens' Impeachment","d":"Wake the rest of America up.","u":"https://citizensimpeachment.com","s":false,"g":[]},{"t":"quick","n":"Common Cause","d":"Petitions & voting tools.","u":"https://www.commoncause.org/take-action","s":false,"g":[]},{"t":"quick","n":"MoveOn","d":"Sign petitions from home.","u":"https://sign.moveon.org/categories","s":false,"g":[]},{"t":"quick","n":"MesOpinions","d":"Even more petitions.","u":"https://www.mesopinions.com/en","s":false,"g":[]},{"t":"quick","n":"RepresentUs","d":"Auto-email Congress in a few seconds.","u":"https://represent.us/actions/","s":false,"g":["email"]},{"t":"quick","n":"FSFP","d":"Petitions for a free America.","u":"https://freespeechforpeople.org/take-action/","s":false,"g":[]},{"t":"quick","n":"Vote In Or Out","d":"Pro-democracy actions by phone.","u":"https://linktr.ee/voteinorout","s":false,"g":[]},{"t":"quick","n":"SUFS","d":"Protect science from being dismantled.","u":"https://www.standupforscience.net/take-action","s":false,"g":[]},{"t":"quick","n":"chilli","d":"An app for easy philanthropy.","u":"https://linktr.ee/chilli.club","s":false,"g":["call","money"]},{"t":"quick","n":"Climate Hawks Vote","d":"Environmental letter-sending.","u":"https://actionnetwork.org/groups/climate-hawks-vote","s":false,"g":["email"]},{"t":"quick","n":"EFF Action Center","d":"Petition for digital rights.","u":"https://act.eff.org/action","s":false,"g":[]},{"t":"quick","n":"UNICEF","d":"Advocate for children everywhere.","u":"https://www.unicef.org/take-action","s":false,"g":[]},{"t":"quick","n":"Oxfam","d":"International justice petitions & articles.","u":"https://www.oxfamamerica.org/take-action","s":false,"g":[]},{"t":"quick","n":"CAP","d":"Share your story, contact Congress, and follow the press.","u":"https://www.americanprogress.org/about-us/take-action","s":false,"g":["email"]},{"t":"quick","n":"OrganizeFor","d":"Churn out quick petitions.","u":"https://campaigns.organizefor.org/categories","s":false,"g":[]},{"t":"quick","n":"PDA","d":"Click to sign petitions, volunteer, and more.","u":"https://pdamerica.org/click-brigade","s":false,"g":[]},{"t":"easy","n":"Stand With Minnesota","d":"Aid Minnesotans impacted by ICE and federal enforcement.","u":"https://www.standwithminnesota.com","s":true,"g":["money"]},{"t":"easy","n":"Goods Unite Us","d":"Easy boycotting.","u":"https://www.goodsuniteus.com","s":true,"g":["money"]},{"t":"easy","n":"Progressive Congress","d":"Vote grassroots.","u":"https://progressivecongress.net","s":true,"g":[]},{"t":"easy","n":"SOS","d":"Defend your under-attack privacy.","u":"https://stateofsurveillance.org/resources","s":true,"g":[]},{"t":"easy","n":"GoFundMe CF","d":"Support your neighbors.","u":"https://www.gofundme.com/discover/community-fundraiser","s":true,"g":["money"]},{"t":"easy","n":"oath.vote","d":"Quick democratic tools.","u":"https://linktr.ee/oath.vote","s":true,"g":["email","money","vote"]},{"t":"easy","n":"Conscious Spend","d":"Company ethics as you shop.","u":"https://consciousspend.com","s":false,"g":["call","money"]},{"t":"easy","n":"faaithellis's Linktree","d":"Handpicked fundraisers.","u":"https://linktr.ee/faaithellis","s":false,"g":["money"]},{"t":"easy","n":"CA's What To Do","d":"Good first steps and readings.","u":"https://open.substack.com/pub/cmarmitage/p/what-you-do-about-the-despair","s":false,"g":[]},{"t":"easy","n":"Resource Guide via Indivisible","d":"Some more first steps.","u":"https://blueturnindivisible.org/resources.html","s":false,"g":[]},{"t":"easy","n":"Defund Broligarchy via Indivisible","d":"Boycott technofascism.","u":"https://blueturnindivisible.org/defund_broligarchy","s":false,"g":["money"]},{"t":"easy","n":"PP","d":"The greatest threat you haven't heard about.","u":"https://purgepalantir.com","s":false,"g":["risk"]},{"t":"easy","n":"#FoxTakedown","d":"Protest right-wing propaganda.","u":"https://www.foxtakedown.com","s":false,"g":[]},{"t":"easy","n":"As You Sow","d":"Boycott unethical stocks.","u":"https://www.asyousow.org/invest-your-values","s":false,"g":["money"]},{"t":"easy","n":"ICE Costs US","d":"A mailing list on ICE's tax dollars.","u":"https://icecostsus.com","s":false,"g":["email"]},{"t":"easy","n":"Justice Democrats","d":"Nominate a fierce fighter.","u":"https://justicedemocrats.com","s":false,"g":["vote"]},{"t":"easy","n":"CPC","d":"Build up the honest politicians.","u":"https://progressives.house.gov","s":false,"g":["vote"]},{"t":"easy","n":"QuitGPT","d":"Boycott AIs that fund fascism.","u":"https://quitgpt.org","s":false,"g":["money"]},{"t":"easy","n":"NDLB","d":"Promote working-class candidates.","u":"https://www.nodemleftbehind.com","s":false,"g":["vote"]},{"t":"easy","n":"States Win","d":"Help flip swing states.","u":"https://stateswin.org","s":false,"g":["vote"]},{"t":"easy","n":"SwingLeft","d":"Funding midterm successes.","u":"https://swingleft.org","s":false,"g":["money","vote"]},{"t":"easy","n":"OurRevolution","d":"Defund oligarchs, fund people.","u":"https://ourrevolution.com/","s":false,"g":[]},{"t":"easy","n":"BoyCat","d":"Shop ethically online and protect your IP.","u":"https://www.boycat.io","s":false,"g":["money"]},{"t":"easy","n":"Plastic Bank","d":"Turn plastic into currency.","u":"https://plasticbank.com","s":false,"g":[]},{"t":"easy","n":"TPL","d":"Protect public lands.","u":"https://www.tpl.org","s":false,"g":["money"]},{"t":"easy","n":"PCMag Data Removal Services","d":"Wipe your info from databases.","u":"https://www.pcmag.com/picks/the-best-personal-data-removal-services","s":false,"g":["money"]},{"t":"easy","n":"Earthly Education","d":"Accessible environmentalism.","u":"https://linktr.ee/earthlyeducation","s":false,"g":[]},{"t":"easy","n":"Climate Apocalypse","d":"A climate crisis org.","u":"https://linktr.ee/climate.apocalypse","s":false,"g":[]},{"t":"easy","n":"ActBlue","d":"Type in your locality, make donations.","u":"https://secure.actblue.com/directory/all/all","s":false,"g":["money","vote"]},{"t":"easy","n":"DEFIANCE.org","d":"Celebrity-led resistance.","u":"https://www.defiance.org","s":false,"g":["money"]},{"t":"easy","n":"The 80% Bill","d":"Sign the pledge.","u":"https://the80percentbill.com","s":false,"g":["vote"]},{"t":"easy","n":"CFPR","d":"Add your suggestions.","u":"https://progressivereform.org/responsive-government/responsive-government-increase-public-protection/building-peoples-regulatory-agenda","s":false,"g":[]},{"t":"easy","n":"Sway","d":"Join an online, like-minded voting group.","u":"https://www.sway.co/","s":false,"g":["vote"]},{"t":"medium","n":"Mobilize.us","d":"Find a local protest.","u":"https://www.mobilize.us/map/","s":true,"g":[]},{"t":"medium","n":"find a protest","d":"Even more demonstrations, updated daily.","u":"https://www.findaprotest.info","s":true,"g":[]},{"t":"medium","n":"Operation Sunshine","d":"How to do local politics.","u":"https://operationsunshine.info/resources","s":true,"g":[]},{"t":"medium","n":"ICYDAK's 30 Tactics","d":"A great shortlist.","u":"https://icydak.substack.com/p/the-30-most-effective-ways-to-resist","s":true,"g":[]},{"t":"medium","n":"50501","d":"Protest with the 50501 movement.","u":"https://www.fiftyfifty.one/organizer-resources","s":true,"g":[]},{"t":"medium","n":"Beyond the Ballot","d":"Democracy isn't just voting.","u":"https://www.beyondtheballot.org","s":true,"g":[]},{"t":"medium","n":"March4Democracy","d":"Pretty self-explanatory.","u":"https://march4democracy.org","s":true,"g":[]},{"t":"medium","n":"FLARE","d":"Show up in your rep's office.","u":"https://flareusa.org/","s":true,"g":[]},{"t":"medium","n":"Courage For Democracy","d":"Replace useless Congress.","u":"https://couragefordemocracy.com","s":true,"g":["money"]},{"t":"medium","n":"Choose Democracy","d":"Straightforward guidance.","u":"https://choosedemocracy.us","s":true,"g":[]},{"t":"medium","n":"One Million Rising","d":"Video trainings and easy organizing.","u":"https://commonslibrary.org/organising-your-local-community-one-million-risings-campaign-against-authoritarianism","s":false,"g":[]},{"t":"medium","n":"Fight for the Future","d":"A technological liberation movement.","u":"https://www.fightforthefuture.org","s":false,"g":[]},{"t":"medium","n":"Blue Turn Indivisible","d":"Take action for democracy.","u":"https://blueturnindivisible.org/","s":false,"g":[]},{"t":"medium","n":"Progressive Victory","d":"Volunteer for working-class campaigns.","u":"https://www.progressivevictory.win","s":false,"g":[]},{"t":"medium","n":"Task Force for Democracy","d":"A student movement.","u":"https://taskforceusa.org","s":false,"g":[]},{"t":"medium","n":"OF/BY/FOR","d":"A new movement, coming soon.","u":"https://ofbyforusa.org","s":false,"g":[]},{"t":"medium","n":"Disrupt","d":"Turning Point USA for the left.","u":"https://www.disruptpac.org","s":false,"g":[]},{"t":"medium","n":"Protect Democracy","d":"Context and tools for you.","u":"https://protectdemocracy.org","s":false,"g":[]},{"t":"medium","n":"Indivisible","d":"Find a protest group.","u":"https://indivisible.org/get-involved/find-a-group","s":false,"g":[]},{"t":"medium","n":"Refuse Fascism!","d":"Reject American fascism.","u":"https://refusefascism.org/featured-news/peoples-indictment","s":false,"g":["write"]},{"t":"medium","n":"UNITED24","d":"Ukraine's official fundraising platform.","u":"https://u24.gov.ua/","s":false,"g":["money"]},{"t":"medium","n":"Mutual Aid Hub","d":"Build parallel markets to uplift the needy.","u":"https://www.mutualaidhub.org","s":false,"g":["money"]},{"t":"medium","n":"Force Multiplier","d":"Minutes, dollars, & actions.","u":"https://www.forcemultiplierus.org","s":false,"g":["money"]},{"t":"medium","n":"Field Team 6","d":"Progressivism on the ground.","u":"https://linktr.ee/fieldteam_6","s":false,"g":[]},{"t":"medium","n":"The People's Union USA","d":"Economic resisters.","u":"https://thepeoplesunionusa.com/faq","s":false,"g":[]},{"t":"medium","n":"Money Out of Politics","d":"An anti-corruption community.","u":"https://moneyoutofpolitics.org","s":false,"g":[]},{"t":"medium","n":"Purple Revolution","d":"An online populist movement.","u":"https://tinyurl.com/5cb485pr","s":false,"g":[]},{"t":"medium","n":"Mayday Movement USA","d":"A yearlong struggle.","u":"https://maydaymovementusa.org","s":false,"g":[]},{"t":"medium","n":"14th NOW","d":"An impeachment movement.","u":"https://nowmarch.org/","s":false,"g":[]},{"t":"medium","n":"Save America Movement","d":"Donate or volunteer.","u":"https://thesaveamericamovement.org","s":false,"g":[]},{"t":"medium","n":"American Opposition","d":"Sign up for direct action.","u":"https://www.americanopposition.org/","s":false,"g":[]},{"t":"medium","n":"FEC","d":"Work in election security or voter literacy.","u":"https://fairelectionscenter.org","s":false,"g":["vote"]},{"t":"medium","n":"checkbook.org","d":"Keep your money in the right hands.","u":"https://www.checkbook.org/national/buy-nothing/","s":false,"g":["money"]},{"t":"medium","n":"Localize","d":"Buy from local farmers.","u":"https://www.localizefood.com","s":false,"g":["money"]},{"t":"medium","n":"Third Parties List","d":"Break from the duopoly.","u":"https://www.wikiwand.com/en/articles/Third_party_(U.S._politics)","s":false,"g":[]},{"t":"medium","n":"OHCHR","d":"Report human rights abuses you've witnessed.","u":"https://www.ohchr.org/en/choosingyourcomplaint","s":false,"g":["risk"]},{"t":"medium","n":"Project Mail Storm","d":"Make your voice heard via pen.","u":"https://projectmailstorm.carrd.co","s":false,"g":["write"]},{"t":"medium","n":"Postcards To Voters","d":"Write to swing states.","u":"https://postcardstovoters.org","s":false,"g":["write"]},{"t":"medium","n":"Democracy Forward","d":"People's guides and institutional justice.","u":"https://democracyforward.org/get-involved","s":false,"g":[]},{"t":"medium","n":"Findhelp","d":"Receive or assist local social services.","u":"https://www.findhelp.org","s":false,"g":[]},{"t":"medium","n":"Stand Up America","d":"Repeated democratic activism.","u":"https://act.standupamerica.com/forms/volunteer-page","s":false,"g":[]},{"t":"medium","n":"ILRC","d":"Immigration printouts & resources.","u":"https://www.ilrc.org/community-resources/know-your-rights","s":false,"g":[]},{"t":"medium","n":"Red Cross Emergency","d":"Be a pillar of preparedness.","u":"https://www.redcross.org/get-help/how-to-prepare-for-emergencies.html","s":false,"g":[]},{"t":"medium","n":"DoSomething.org","d":"Do, well, something.","u":"https://dosomething.org","s":false,"g":[]},{"t":"hard","n":"The General Strike","d":"Unconditionally dissent.","u":"https://linktr.ee/gsusresources","s":true,"g":[]},{"t":"hard","n":"3.5%","d":"A peaceful strike built on the 3.5% research.","u":"https://threepointfive.us","s":true,"g":[]},{"t":"hard","n":"Blackout The System","d":"Extended, impactful boycotts.","u":"https://linktr.ee/blackoutthesystem","s":true,"g":[]},{"t":"hard","n":"Strike Ready Corps","d":"Even more general strikes.","u":"https://www.strikeready.org","s":true,"g":[]},{"t":"hard","n":"Leaving MAGA","d":"Reach out across the aisle.","u":"https://leavingmaga.org","s":true,"g":[]},{"t":"hard","n":"The Daisy Chain","d":"How to network.","u":"https://muppetgender.substack.com/p/the-daisy-chain-a-neighbors-guide","s":true,"g":[]},{"t":"hard","n":"Resistance Directory","d":"A simple, extensive toolkit.","u":"https://resistancedirectory.com","s":true,"g":[]},{"t":"hard","n":"CSC Library","d":"Love activism? Wanna do more?","u":"https://commonslibrary.org","s":true,"g":[]},{"t":"hard","n":"GNVAD","d":"200+ nonviolent actions to take.","u":"https://nvdatabase.swarthmore.edu/browse-methods","s":true,"g":[]},{"t":"hard","n":"Community Resource Hub","d":"Movement building & training.","u":"https://communityresourcehub.org","s":true,"g":[]},{"t":"hard","n":"The Conscious Citizens","d":"Tons and tons of tools.","u":"https://www.theconsciouscitizens.org/","s":true,"g":[]},{"t":"hard","n":"Activist Checklist","d":"Required before further action.","u":"https://activistchecklist.org/checklists","s":true,"g":[]},{"t":"hard","n":"Activist Handbook","d":"The wiki for activists.","u":"https://activisthandbook.org/introduction","s":true,"g":[]},{"t":"hard","n":"Beautiful Trouble","d":"A social movement toolbox.","u":"https://beautifultrouble.org/toolbox","s":false,"g":[]},{"t":"hard","n":"Tactics4Change","d":"Learn from past resistance efforts.","u":"https://www.tactics4change.org","s":false,"g":[]},{"t":"hard","n":"CNCR","d":"Another great nonviolence resource.","u":"https://www.nonviolent-conflict.org","s":false,"g":[]},{"t":"hard","n":"Build The Resistance","d":"The pro-democracy hub.","u":"https://www.buildtheresistance.org","s":false,"g":[]},{"t":"hard","n":"Movement Infrastructure Project","d":"Buy protest gear.","u":"https://bio.site/MovementInfrastructure","s":false,"g":[]},{"t":"hard","n":"Indivisible's Practical Guide","d":"Build protests from scratch.","u":"https://indivisible.org/resource/guide","s":false,"g":[]},{"t":"hard","n":"Amnesty via Ecosia","d":"Civil society & activism guides.","u":"https://www.ecosia.org/search?method=index&q=%22toolkit%22+site%3Aamnestyusa.org+OR+site%3Aamnesty.org","s":false,"g":[]},{"t":"hard","n":"IC's Block It!","d":"All things ICE.","u":"https://www.interruptingcriminalization.com/block-it","s":false,"g":[]},{"t":"hard","n":"Shut The Camps","d":"Protest concentration camps.","u":"https://www.shutthecamps.org","s":false,"g":["risk"]},{"t":"hard","n":"Communities Not Cages","d":"Campaigns against concentration camps.","u":"https://tinyurl.com/2bbsbuth","s":false,"g":[]},{"t":"hard","n":"Freedom Trainers","d":"Noncooperation readings & trainings.","u":"https://freedomtrainers.net","s":false,"g":[]},{"t":"hard","n":"Community Defense & Non-Compliance","d":"Even more guides.","u":"https://docs.proton.me/doc?mode=open-url&token=NTJ87EQHER#nh6wkM4Qx4mM","s":false,"g":[]},{"t":"hard","n":"Patriotic Millionaires","d":"Leverage your wealth for good.","u":"https://patrioticmillionaires.org/become-a-member","s":false,"g":["money"]},{"t":"hard","n":"The Mass Blackout","d":"A US boycott community.","u":"https://www.themassblackout.com/","s":false,"g":["call","email"]},{"t":"hard","n":"People's Action","d":"Register to organize!","u":"https://peoplesaction.org/organizing-revival","s":false,"g":[]},{"t":"hard","n":"SELC","d":"Mutual aid, co-ops, & parallel economics.","u":"https://www.theselc.org/resources","s":false,"g":["money"]},{"t":"hard","n":"Mutual Aid Disaster Relief","d":"Save lives during civil crises.","u":"https://mutualaiddisasterrelief.org/resources","s":false,"g":[]},{"t":"hard","n":"The Black Panther Party","d":"Guess who's back?","u":"https://linktr.ee/theblackpantherparty","s":false,"g":["risk"]},{"t":"hard","n":"Four Winds Approach","d":"A Panther guide.","u":"https://fourwinds.uate.net/chapters/introduction","s":false,"g":["risk"]},{"t":"hard","n":"BDS","d":"One of the world's largest peace movements.","u":"https://bdsmovement.net/get-involved-boycott","s":false,"g":["risk"]},{"t":"hard","n":"Mijente's #notechforICE","d":"A digital justice movement.","u":"https://notechforice.com","s":false,"g":[]},{"t":"hard","n":"Media Justice Tools","d":"Resist unconstitutional tech.","u":"https://mediajustice.org/tools/","s":false,"g":[]},{"t":"hard","n":"Dare To Struggle","d":"Direct action in many areas.","u":"https://daretostruggle.org/2023/05/29/mission-statement","s":false,"g":[]},{"t":"hard","n":"National Lawyers Guild","d":"Get or become a legal observer.","u":"https://www.nlg.org/massdefenseprogram/los","s":false,"g":[]},{"t":"hard","n":"LittleSis","d":"Freelance as a political forensic accountant.","u":"https://littlesis.org/toolkit","s":false,"g":[]},{"t":"hard","n":"PI Members List","d":"Sign up for an antifascist org that interests you.","u":"https://progressive.international/members/","s":false,"g":[]},{"t":"hard","n":"XR","d":"Mobilize for an Earth worth fighting for.","u":"https://rebellion.global","s":false,"g":["risk"]},{"t":"hard","n":"Direct Action Everywhere","d":"Until every animal is free.","u":"https://www.directactioneverywhere.com","s":false,"g":["risk"]},{"t":"hard","n":"Atlas Movement","d":"A single worldwide political party.","u":"https://linktr.ee/atlasmovement","s":false,"g":[]},{"t":"hard","n":"A Better Way 2A","d":"Exercise your right to bear arms.","u":"https://www.abetterway2a.com/resources","s":false,"g":["risk"]},{"t":"hard","n":"EWOC","d":"Unionize your workplace.","u":"https://workerorganizing.org","s":false,"g":[]},{"t":"hard","n":"Run For Something","d":"Become a politician yourself.","u":"https://runforsomething.net/run-for-office","s":false,"g":["vote"]},{"t":"hard","n":"Leaders We Deserve","d":"Join people-centered politicians.","u":"https://leaderswedeserve.com/primarying-democrats","s":false,"g":["vote"]},{"t":"hard","n":"PCCC","d":"Get resources as a candidate.","u":"https://www.boldprogressives.org/resources-for-candidates","s":false,"g":["vote"]},{"t":"info","n":"We Are The Change","d":"A list of global issues.","u":"https://wearethechange.carrd.co","s":true,"g":[]},{"t":"info","n":"ShareTheMeal","d":"Feed someone in need through the UN World Food Programme.","u":"https://sharethemeal.org/en-us","s":true,"g":[]},{"t":"info","n":"GreaterGood","d":"Free daily charity deeds & subscriptions.","u":"https://greatergood.com/","s":true,"g":[]},{"t":"info","n":"More Perfect Union","d":"Recent, digestible news.","u":"https://linktr.ee/moreperfectunion","s":true,"g":[]},{"t":"info","n":"Political Integrity Project","d":"Who makes how much?!","u":"https://integrityindex.us/","s":true,"g":[]},{"t":"info","n":"Progressive Websites","d":"Media outlets & more.","u":"https://progressive-sites.net/#NS","s":true,"g":[]},{"t":"info","n":"Too Good To Go","d":"Buy cheap food before it's wasted.","u":"https://www.toogoodtogo.com/en-us","s":false,"g":["call"]},{"t":"info","n":"This Week in Democracy via Zeteo","d":"Weekly news.","u":"https://zeteo.com/s/this-week-in-democracy","s":false,"g":[]},{"t":"info","n":"WTF Just Happened Today?","d":"Daily news.","u":"https://whatthefuckjusthappenedtoday.com","s":false,"g":["email"]},{"t":"info","n":"The ReVolt","d":"People-driven news.","u":"https://www.the-revolt.app","s":false,"g":["call"]},{"t":"info","n":"Novara Media","d":"New media for a different politics.","u":"https://novaramedia.com","s":false,"g":[]},{"t":"info","n":"Democracy Docket","d":"Anti-authoritarian news and court cases.","u":"https://www.democracydocket.com","s":false,"g":[]},{"t":"info","n":"PAXIS","d":"AI lifeline for immigrant support.","u":"https://www.paxis.app","s":false,"g":["call","risk"]},{"t":"info","n":"PPI","d":"Mass incarceration and prison justice.","u":"https://www.prisonpolicy.org","s":false,"g":[]},{"t":"info","n":"Battalion SAR","d":"A New Mexico-based desert rescue org.","u":"https://battalionsar.com","s":false,"g":["risk"]},{"t":"info","n":"Charity Navigator","d":"A solid giving platform.","u":"https://www.charitynavigator.org","s":false,"g":[]},{"t":"info","n":"HRC's 15 Trusted Charities Helping Children","d":"A list.","u":"https://www.humanrightscareers.com/issues/trusted-charities-helping-children","s":false,"g":[]},{"t":"info","n":"IDP","d":"Equip yourself with all info immigration-related.","u":"https://www.immigrantdefenseproject.org/for-communities","s":false,"g":[]},{"t":"info","n":"DeFlock","d":"What are ALPRs? What's the big deal?","u":"https://deflock.org","s":false,"g":["risk"]},{"t":"info","n":"ToS;DR","d":"What's in those Terms of Service agreements?","u":"https://tosdr.org/en","s":false,"g":[]},{"t":"info","n":"Other98","d":"Memes and think pieces.","u":"https://other98.com","s":false,"g":[]},{"t":"info","n":"CFR Ed.","d":"Learn politics, run sims, get teaching plans.","u":"https://education.cfr.org","s":false,"g":[]},{"t":"info","n":"Ballotpedia","d":"Build civic literacy & voting-related things.","u":"https://ballotpedia.org/Public_Policy","s":false,"g":["vote"]},{"t":"info","n":"Ground News","d":"Parse through corporate media for bias.","u":"https://ground.news/interest/international","s":false,"g":[]},{"t":"info","n":"LiveFromOccupied","d":"Observe an occupied America.","u":"https://linktr.ee/livefromoccupied","s":false,"g":[]},{"t":"info","n":"Eyes on AI","d":"Receive your personalized privacy guide.","u":"https://eyeson-ai.org","s":false,"g":[]},{"t":"info","n":"CA's \"Fax Machine\"","d":"198 reasons to email Congress.","u":"https://open.substack.com/pub/cmarmitage/p/check-the-temperature-the-water-is","s":false,"g":["email"]},{"t":"info","n":"AgainstMachines","d":"Take antifascism to the tech world.","u":"https://www.againstmachines.org","s":false,"g":["risk"]},{"t":"info","n":"onX Offroad","d":"Find and preserve trails.","u":"https://linktr.ee/onXOffroad","s":false,"g":[]},{"t":"info","n":"OFFGRID Survival","d":"Learn survival skills.","u":"https://offgridsurvival.com","s":false,"g":[]},{"t":"info","n":"World Monitor","d":"Real-time global intelligence.","u":"https://worldmonitor.app","s":false,"g":[]},{"t":"info","n":"MyHealthForward","d":"Find healthy alternatives.","u":"https://linktr.ee/myhealthforward","s":false,"g":[]},{"t":"info","n":"Transnational Institute","d":"Research theories & data.","u":"https://www.tni.org/en/about","s":false,"g":[]},{"t":"info","n":"Impactful Ninja","d":"Positive news and charity.","u":"https://impactful.ninja","s":false,"g":[]},{"t":"info","n":"The Progress Network","d":"Replace doomscrolling.","u":"https://theprogressnetwork.org","s":false,"g":[]}];
+const TIERS = [
+  {id:'quick', name:'Two minutes', time:'2–5 min', lvl:1, blurb:'Calls, texts and petitions you can finish before your coffee cools.'},
+  {id:'easy', name:'An afternoon', time:'An hour or so', lvl:2, blurb:'Small commitments: where you shop, who you fund, what you sign up for.'},
+  {id:'medium', name:'Show up', time:'Ongoing', lvl:3, blurb:'Protests, local politics, letter-writing and volunteering.'},
+  {id:'hard', name:'All in', time:'Big commitment', lvl:4, blurb:'Strikes, organizing, running for office and movement-building.'},
+  {id:'info', name:'Stay informed', time:'Daily habit', lvl:0, blurb:'News, research and everyday tools that keep you clear-eyed.'}
+];
+const TAGS = {call:'Call', email:'Email', money:'Money', vote:'Voting', write:'By hand', risk:'Higher risk'};
+const FOLD = 8;
+const state = {q:'', f:new Set(), open:new Set()};
+
+const chipDefs = [['pick','Top picks'],['call','Call'],['email','Email'],['money','Money'],['vote','Voting'],['write','By hand']];
+const chips = document.getElementById('chips');
+chipDefs.forEach(([k,label])=>{
+  const b=document.createElement('button');b.className='chip';b.type='button';b.setAttribute('aria-pressed','false');b.id='f-'+k;
+  b.innerHTML='<span class="dot"></span>'+label;
+  b.onclick=()=>{state.f.has(k)?state.f.delete(k):state.f.add(k);b.setAttribute('aria-pressed',state.f.has(k));render();};
+  chips.appendChild(b);
+});
+const nav=document.getElementById('nav');
+TIERS.forEach(t=>{const a=document.createElement('a');a.href='#'+t.id;a.textContent=t.name;a.dataset.id=t.id;nav.appendChild(a);});
+
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dom=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return ''}};
+function matches(l){
+  if(state.q){const h=(l.n+' '+l.d+' '+dom(l.u)).toLowerCase(); if(!state.q.split(/\s+/).every(w=>h.includes(w))) return false;}
+  for(const f of state.f){ if(f==='pick'){ if(!l.s) return false; } else if(!l.g.includes(f)) return false; }
+  return true;
+}
+function row(l){
+  const tags=l.g.map(g=>`<span class="tag${g==='risk'?' risk':''}">${TAGS[g]}</span>`).join('');
+  return `<li><a href="${esc(l.u)}" target="_blank" rel="noopener">
+    <span class="nm">${esc(l.n)}${l.s?'<span class="pick">Top pick</span>':''}</span>
+    <span class="ds">${esc(l.d)}</span>
+    <span class="meta"><span class="dom">${esc(dom(l.u))}</span>${tags}</span>
+    <span class="go" aria-hidden="true">↗</span></a></li>`;
+}
+function render(){
+  const filtering = state.q || state.f.size;
+  let html='', total=0;
+  TIERS.forEach(t=>{
+    const items=LINKS.filter(l=>l.t===t.id && matches(l)).sort((a,b)=>b.s-a.s);
+    total+=items.length;
+    if(!items.length && filtering) return;
+    const open = filtering || state.open.has(t.id);
+    const shown = open?items:items.slice(0,FOLD);
+    const meter = t.lvl?`<span class="meter" aria-label="Effort ${t.lvl} of 4">${[1,2,3,4].map(i=>`<i class="${i<=t.lvl?'f':''}"></i>`).join('')}</span>`:'';
+    html+=`<section class="tier" id="${t.id}">
+      <div class="th"><h2>${t.name}</h2><span class="time">${meter}${t.time}</span></div>
+      <p class="blurb">${t.blurb}</p>
+      <ol class="list">${shown.map(row).join('')}</ol>
+      ${items.length>shown.length?`<button class="more" type="button" id="more-${t.id}" data-t="${t.id}">Show ${items.length-shown.length} more in ${t.name}</button>`:''}
+    </section>`;
+  });
+  if(filtering && !total) html=`<div class="empty">Nothing matches that yet. Try a shorter word, or clear a filter.</div>`;
+  document.getElementById('main').innerHTML=html;
+  document.querySelectorAll('.more').forEach(b=>b.onclick=()=>{state.open.add(b.dataset.t);render();});
+  [...nav.children].forEach(a=>a.hidden = filtering && !document.getElementById(a.dataset.id));
+}
+document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value.trim().toLowerCase();render();});
+render();
+
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){[...nav.children].forEach(a=>a.classList.toggle('on',a.dataset.id===e.target.id));}})},{rootMargin:'-40% 0px -55% 0px'});
+new MutationObserver(()=>document.querySelectorAll('section.tier').forEach(s=>io.observe(s))).observe(document.getElementById('main'),{childList:true});
+document.querySelectorAll('section.tier').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>
